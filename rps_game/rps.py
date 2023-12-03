@@ -1,43 +1,52 @@
 import random
 
-options = ['rocks', 'papers', 'scissors','rock','paper','scissor','r','s','p']
-rocks 	= ['rock' , 'rocks','r']
-scissors= ['scissor','scissors','s']
-papers  = ['paper', 'papers','p']
-p_score = 0
-c_score = 0
-while True:
-	try:
-		print()
-		print("Player".ljust(10),":",p_score)
-		print("Computer".ljust(10),":",c_score)
-		op = random.randint(0,2)
-		player = input("Player-----").lower()
-		computer = options[op]
-		print("Computer---"+computer)
+def check_win(player, computer):
+    if player == computer:
+        return "Draw"
+    elif player == 'rocks' and computer in ['papers', 'scissors']:
+        return "player wins"
+    elif player == 'papers' and computer in ['rocks', 'scissors']:
+        return "player wins"
+    elif player == 'scissors' and computer in ['rocks', 'papers']:
+        return "player wins"
+    else:
+        return "computer wins"
 
-		if player in rocks and computer == 'papers':
-			print("computer wins")
-			c_score += 1
-		elif player in rocks and computer == 'scissors':
-			print("player wins")
-			p_score += 1
-		elif player in scissors and computer == 'rocks':
-			print("computer wins")
-			c_score += 1
-		elif player in scissors and computer == 'papers':
-			print("player wins")
-			p_score += 1
-		elif player in papers and computer == 'rocks':
-			print("player wins")
-			p_score += 1
-		elif player in papers and computer == 'scissors':
-			print("computer wins")
-			c_score += 1
-		elif player not in options :
-			print("enhi taiya jhulni hai rani ho rama")
-			c_score += 5
-		else:
-			print("Draw")
-	except :
-		print("Finish")
+options = ['rocks', 'papers', 'scissors']
+scores = {'player': 0, 'computer': 0}
+
+def play_game():
+    global scores
+
+    print("\nPlayer".ljust(10), ":", scores['player'])
+    print("Computer".ljust(10), ":", scores['computer'])
+
+    player = input("Player -----").lower()
+    computer = random.choice(options)
+
+    print("Computer ---" + computer)
+
+    result = check_win(player, computer)
+    print(result)
+
+    if result == "player wins":
+        scores['player'] += 1
+    elif result == "computer wins":
+        scores['computer'] += 1
+
+    if scores['player'] == 3 or scores['computer'] == 3:
+        print("\nFirst to three wins")
+        scores = {'player': 0, 'computer': 0}
+
+def main():
+    while True:
+        try:
+            play_game()
+        except (EOFError, KeyboardInterrupt):
+            print("\nFinish")
+            break
+        except Exception as e:
+            print(f"\nError: {e}")
+
+if __name__ == "__main__":
+    main()
